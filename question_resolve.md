@@ -12,3 +12,22 @@
 
 ####TCP文件大类
 
+##### net_addr 类
+
+
+这里的类封装  IP + PORT 变成 sockaddr_in ：
+    里面会指明 FAMILLY + IP + PORT，这里toString返回字符串（IP + PORT）
+
+
+##### tcp_acceptor类
+
+这里的类用于 server端用于创建监听套接字
+- setsockopt 用于 创建套接字
+- bind 套接字  
+- listen 监听
+
+
+
+accept 用于server 和 客户端的连接，这里是在三次握手之后
+
+
