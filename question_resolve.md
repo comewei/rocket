@@ -27,7 +27,33 @@
 - listen 监听
 
 
-
 accept 用于server 和 客户端的连接，这里是在三次握手之后
+
+
+##### tcp_buffer类
+这个是
+![Alt text](imgs/image.png)
+
+##### tcp_connection
+记录每一次tcp连接需要进行的操作
+输入缓冲区——输出缓冲区（用来更好存储数据）
+m_fd_event 这里得到tcp连接对应的fd，用于读写操作 (这里通过fcntl设置NonBlock)
+
+如果在tcpserver上，需要使用epoll监听可读事件，加入EpollEvent
+
+- listenRead()用于监听可读事件，绑定onRead()事件
+
+- listenWrite()用于监控可写事件，绑定onWrite()事件
+
+- execute 执行逻辑处理
+  - 在服务器端调用RpcDispatcher的dispatch方法
+
+
+
+
+
+##### tcp_client类
+
+
 
 

@@ -38,20 +38,26 @@ class IPNetAddr : public NetAddr {
 
   IPNetAddr(sockaddr_in addr);
 
+  // 返回封装后的sockaddr
   sockaddr* getSockAddr();
 
+  // 得到m_addrs的总长度
   socklen_t getSockLen();
 
+  // 这里得到ip的地址簇 比如AF_NET表示IPv4
   int getFamily();
 
+  // 返回ip地址及其端口
   std::string toString();
 
+  // 判断ip是否合理
   bool checkValid();
  
  private:
   std::string m_ip;
   uint16_t m_port {0};
 
+  // family + ip + port
   sockaddr_in m_addr;
 
 };

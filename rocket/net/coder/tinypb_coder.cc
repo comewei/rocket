@@ -45,6 +45,7 @@ void TinyPBCoder::decode(std::vector<AbstractProtocol::s_ptr>& out_messages, Tcp
 
           // 结束符的索引
           int j = i + pk_len - 1;
+          // 这里说明信息还不全，
           if (j >= buffer->writeIndex()) {
             continue;
           }
@@ -59,6 +60,7 @@ void TinyPBCoder::decode(std::vector<AbstractProtocol::s_ptr>& out_messages, Tcp
       }
     }
 
+    // 这里说明没有读全
     if (i >= buffer->writeIndex()) {
       DEBUGLOG("decode end, read all buffer data");
       return;

@@ -28,6 +28,7 @@ TcpAcceptor::TcpAcceptor(NetAddr::s_ptr local_addr) : m_local_addr(local_addr) {
   if (setsockopt(m_listenfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) != 0) {
     ERRORLOG("setsockopt REUSEADDR error, errno=%d, error=%s", errno, strerror(errno));
   }
+  // TODO: 这里打个端点，看下m_listenfd 是不是赋值了，应该是付值了
 
   socklen_t len = m_local_addr->getSockLen();
   if(bind(m_listenfd, m_local_addr->getSockAddr(), len) != 0) {

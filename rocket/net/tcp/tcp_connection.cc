@@ -53,16 +53,18 @@ void TcpConnection::onRead() {
     DEBUGLOG("success read %d bytes from addr[%s], client fd[%d]", rt, m_peer_addr->toString().c_str(), m_fd);
     if (rt > 0) {
       m_in_buffer->moveWriteIndex(rt);
+      // 
       if (rt == read_count) {
         continue;
-      } else if (rt < read_count) {
+      } else if (rt < read_count) { // 比如读到了缓冲区的结尾或者因为管道或者终端读取，读取的字节数小于read_count;
+                                    // 比如信号被中断了
         is_read_all = true;
         break;
       }
-    } else if (rt == 0) {
+    } else if (rt == 0) { // 返回值为0的话，代表连接中断
       is_close = true;
       break;
-    } else if (rt == -1 && errno == EAGAIN) {
+    } else if (rt == -1 && errno == EAGAIN) { // 非阻塞模式，但是发生了读阻塞
       is_read_all = true;
       break;
     }
