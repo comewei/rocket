@@ -60,7 +60,7 @@ void TinyPBCoder::decode(std::vector<AbstractProtocol::s_ptr>& out_messages, Tcp
       }
     }
 
-    // 这里说明没有读全
+    // 这里说明没有读全,这种情况后续是如何处理的
     if (i >= buffer->writeIndex()) {
       DEBUGLOG("decode end, read all buffer data");
       return;

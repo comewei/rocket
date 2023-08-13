@@ -46,6 +46,7 @@ void TcpClient::connect(std::function<void()> done) {
       done();
     }
   } else if (rt == -1) {
+    // 三次握手中间过程 - lxw
     if (errno == EINPROGRESS) {
       // epoll 监听可写事件，然后判断错误码
       m_fd_event->listen(FdEvent::OUT_EVENT, 
