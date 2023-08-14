@@ -79,7 +79,58 @@ Client类
 
 #### coder
 
+##### tinypb_protocol类
 
+定义该类的字段：
+  方法名 + 错误代码 + 错误信息 + 数据值
+
+
+##### tinypb_coder类
+
+encoder(messages, out_buffer) 使用messages转化out_buffer
+
+decoder(out_messages, buffer) 将buffer 里面的字节流转化为messages对象
+
+message 构成：
+  m_pk_len + m_msg_id_len + m_msg_id + m_method_name_len + m_err_code  + m_err_info_len + m_err_info + m_pb_data + parse_success
+
+
+#### rpc 
+
+##### rpc_controler 类
+这里主要是设定类：
+  m_error_code
+  m_error_info
+  m_msg_id
+  m_is_failed
+  m_is_cancled 这个作用是什么
+  m_is_finished
+  m_local_addr
+  m_peer_addr
+  m_timeout
+
+##### rpc_interface
+接口类，有待拓展
+
+##### rpc_channel 类
+这里没有看懂，后面debug一下
+
+
+##### rpc_dispatcher 类
+将request 和 response 关联起来，
+  将 req_protocol->m_pb_data 转化为 req_msg (service->GetRequestPrototype(method).New())通过来构建, rsp_msg 通过 service->GetResponsePrototype(method).New();
+调用closure，将rspprotocol放到replay_messages中，调用连接的reply方法（将replay_messages写入out_buffer中，然后注册写入监听事件）
+
+
+
+#### fd_event 类
+对epoll_event事件进行封装，用于控制套接字是否阻塞；监听事件类型及其回调函数；
+
+#### fd_event_group 类
+设置 fd_event_group 的大小，std::vector<FdEvent>设定的大小
+
+#### IOThreadGroup 类
+这个线程池可以换种方式（这里可以使用sx的线程池设计，需要学习一下）
 
 
 

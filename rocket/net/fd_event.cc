@@ -62,8 +62,9 @@ void FdEvent::cancle(TriggerEvent event_type) {
 
 
 void FdEvent::setNonBlock() {
-  
+  // 通过设置F_GETFL返回文件访问模式还有文件状态码
   int flag = fcntl(m_fd, F_GETFL, 0);
+  // 如果设置非阻塞，直接返回；否则设置非阻塞
   if (flag & O_NONBLOCK) {
     return;
   }
