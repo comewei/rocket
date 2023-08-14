@@ -155,6 +155,7 @@ void EventLoop::loop() {
         }
         if (trigger_event.events & EPOLLOUT) { 
           // DEBUGLOG("fd %d trigger EPOLLOUT event", fd_event->getFd())
+          // 这里加这个任务是什么意思？
           addTask(fd_event->handler(FdEvent::OUT_EVENT));
         }
 

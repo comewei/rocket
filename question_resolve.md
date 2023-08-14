@@ -129,10 +129,50 @@ message 构成：
 #### fd_event_group 类
 设置 fd_event_group 的大小，std::vector<FdEvent>设定的大小
 
+#### IO_THREAD 类
+创建线程，pthread_create(&m_thread, NULL, &IOThread::Main, this)
+  这个时候线程已经开始运行了，但我们可以通过信号量
+  sem_wait 用于信号量的wait， sem_post 用于信号量的post（解放信号量）
+
+
+
 #### IOThreadGroup 类
 这个线程池可以换种方式（这里可以使用sx的线程池设计，需要学习一下）
 
+下面这个代码如果不按照线程顺序析构的话，会出现什么情况，好像这样的代码就不合适了
+```c++
+IOThread* IOThreadGroup::getIOThread() {
+  if (m_index == (int)m_io_thread_groups.size() || m_index == -1)  {
+    m_index = 0;
+  }
+  return m_io_thread_groups[m_index++];
+}
+```
+
+#### timer 类
+
+这里使用 timerfd_create 创建套接字，并且将可读事件
+
+使用multimap 来存储定时事件，如果在现在到期的事件结束，如果定时事件中设置了重复的定时事件，需要重新加入
+    重新设置时间，现在定时器的触发时间。如果后面发生的时间，直接设置与当前时间节点为的距离；否则设置为100
+
+###### addTimerEvent
+    这里为什么需要调用resetArriveTime()，因为如果重复事件触发之后，可能在定时器事件之前，这个时候需要调整重复事件在前面
+
+###### deleteTimerEvent
+这个为什么要使用upper_bound 和 lower_bound
+
+##### wakup_fd 事件
+这里如果是wakeup事件，向缓冲区写入一个字节，用于触发事件
 
 
+#### eventloop
+eventloop 主要分为 主线程（监听连接，分配线程给子线程）；
+                  分线程(监听读写事件)
+                  wakeup事件(用于主线程给分线程唤醒时起作用，如果没有wakeup的情况是怎么样的)
 
+如果不同同一个线程的话，把任务交给m_pending_tasks。
+先执行m_pending_tasks
+这些事件很奇怪，使用addTask加入到m_pending_tasks
 
+                  
